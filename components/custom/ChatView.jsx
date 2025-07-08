@@ -5,11 +5,10 @@ import { api } from "@/convex/_generated/api";
 import Colors from "@/data/Colors";
 import { useConvex, useMutation } from "convex/react";
 import { useParams } from "next/navigation";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import { ArrowRight, Link, Loader2Icon } from "lucide-react";
 import Lookup from "@/data/Lookup";
-import { useState } from "react";
 import axios from "axios";
 import Prompt from "@/data/Prompt";
 import ReactMarkdown from "react-markdown";
@@ -18,7 +17,7 @@ import { useSidebar } from "../ui/sidebar";
 function ChatView() {
   const { id } = useParams();
   const convex = useConvex();
-  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const { userDetail } = useContext(UserDetailContext);
   const { messages, setMessages } = useContext(MessagesContext);
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -29,14 +28,11 @@ function ChatView() {
     id && GetWorkspaceData();
   }, []);
 
-  // get workspace data
   const GetWorkspaceData = async () => {
     const workspace = await convex.query(api.workspace.GetWorkspace, {
       workspaceId: id,
     });
-    console.log("Workspace data:", workspace);
     setMessages(workspace.messages);
-    // return workspace;
   };
 
   useEffect(() => {
@@ -54,13 +50,14 @@ function ChatView() {
     const result = await axios.post("/api/ai-chat", {
       prompt: PROMPT,
     });
+
     let response;
     try {
       response = result.data.result;
     } catch (error) {
-      response = "something went wrong" + error;
+      response = "something went wrong: " + error;
     }
-    // console.log("AI Response:", response);
+
     const aiResp = {
       role: "ai",
       content: response,
@@ -84,9 +81,27 @@ function ChatView() {
     setUserInput("");
   };
 
+  const handleFileUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const content = reader.result;
+
+      const fileMessage = {
+        role: "user",
+        content: `📎 Uploaded file: **${file.name}**\n\n\`\`\`\n${content}\n\`\`\``,
+      };
+
+      setMessages((prev) => [...prev, fileMessage]);
+    };
+
+    reader.readAsText(file); // Can change to readAsDataURL for image files
+  };
+
   return (
     <div className="relative h-[88vh] flex flex-col">
-      {/* user-ai */}
       <div className="flex-1 overflow-y-scroll pl-5">
         {messages.length > 0 &&
           messages.map((message, index) => (
@@ -95,15 +110,18 @@ function ChatView() {
               className="p-3 rounded-lg mb-2 flex gap-2 items-center leading-7"
               style={{ backgroundColor: Colors.CHAT_BACKGROUND }}
             >
-              {message?.role === "user" && (
-                <Image
-                  src={userDetail?.picture}
-                  alt="User"
-                  width={35}
-                  height={35}
-                  className="rounded-full"
-                />
-              )}
+              {message?.role === "user" &&
+                (userDetail?.picture ? (
+                  <Image
+                    src={userDetail.picture}
+                    alt="User"
+                    width={35}
+                    height={35}
+                    className="rounded-full"
+                  />
+                ) : (
+                  <div className="w-[35px] h-[35px] bg-gray-400 rounded-full" />
+                ))}
               <div className="flex flex-col">
                 <ReactMarkdown>{message.content}</ReactMarkdown>
               </div>
@@ -114,20 +132,26 @@ function ChatView() {
             className="p-3 rounded-lg mb-2 flex gap-2 items-center"
             style={{ backgroundColor: Colors.CHAT_BACKGROUND }}
           >
-            <Loader2Icon className="animate-spin " />
+            <Loader2Icon className="animate-spin" />
             <h2>Generating response...</h2>
           </div>
         )}
       </div>
+
       {/* input section */}
       <div className="flex gap-2 items-end pl-5">
-        {userDetail && (
+        {userDetail?.picture ? (
           <Image
-            src={userDetail?.picture}
+            src={userDetail.picture}
             alt="user"
             width={30}
             height={30}
             className="rounded-full cursor-pointer"
+            onClick={toggleSidebar}
+          />
+        ) : (
+          <div
+            className="w-[30px] h-[30px] rounded-full bg-gray-400 cursor-pointer"
             onClick={toggleSidebar}
           />
         )}
@@ -146,8 +170,16 @@ function ChatView() {
               />
             )}
           </div>
-          <div>
-            <Link />
+          <div className="mt-2">
+            <label className="cursor-pointer">
+              <input
+                type="file"
+                className="hidden"
+                onChange={handleFileUpload}
+                accept=".txt,.md,.json"
+              />
+              <Link className="text-blue-400 hover:text-blue-600" />
+            </label>
           </div>
         </div>
       </div>

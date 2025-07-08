@@ -25,8 +25,8 @@ function Header() {
         <Image
           src={"/volt_logo.webp"}
           alt="Volt Logo"
-          width={100}
-          height={100}
+          width={160}
+          height={150}
           onClick={toggleSidebar}
         />
 

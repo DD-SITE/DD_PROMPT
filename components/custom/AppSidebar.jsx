@@ -34,7 +34,7 @@ function AppSidebar() {
         <Image
           src={"/volt_logo.webp"}
           alt="Logo"
-          width={100}
+          width={120}
           height={100}
           className="mx-3 mt-[-18px]"
         />

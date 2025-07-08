@@ -1,22 +1,17 @@
-import SessionWrapper from "./SessionWrapper"; // 👈 import this
-import "./globals.css";
-import Provider from "./Provider"; // your main app provider
-import ConvexClientProvider from "./ConvexClientProvider";
+// app/layout.js
+import './globals.css';
+import ClientLayout from './ClientLayout';
 
 export const metadata = {
-  title: "DD-Prompt",
-  description: "Created by Divyam",
+  title: 'DD-Prompt',
+  description: 'Created by Divyam',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        <SessionWrapper> {/* ✅ all context inside client component */}
-          <ConvexClientProvider>
-            <Provider>{children}</Provider>
-          </ConvexClientProvider>
-        </SessionWrapper>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
