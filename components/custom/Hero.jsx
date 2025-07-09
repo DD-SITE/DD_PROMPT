@@ -16,7 +16,7 @@ function Hero() {
   const [openDialog, setOpenDialog] = useState(false);
   const CreateWorkspace = useMutation(api.workspace.CreateWorkspace);
   const router = useRouter();
-  const fileInputRef = useRef(null); // for the hidden file input
+  const fileInputRef = useRef(null); // hidden file input
 
   useEffect(() => {
     const user = localStorage.getItem("userDetail");
@@ -48,15 +48,18 @@ function Hero() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    if (file.type !== "text/plain") {
+      alert("Only .txt files are supported.");
+      e.target.value = "";
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
       const fileContent = reader.result;
-      console.log("File content:", fileContent);
-
-      // Optional: set as userInput or call onGenerate directly
       setUserInput(file.name + "\n\n" + fileContent);
     };
-    reader.readAsText(file); // or readAsDataURL/file based on needs
+    reader.readAsText(file);
   };
 
   const triggerFileInput = () => {
@@ -84,15 +87,45 @@ function Hero() {
           )}
         </div>
 
-        {/* Attachment Icon */}
-        <div className="flex items-center mt-2 gap-2">
+        {/* Attachment icon with tooltip */}
+        <div
+          className="upload-wrapper"
+          onMouseEnter={() => {
+            const tooltip = document.getElementById("tooltip");
+            if (tooltip) tooltip.style.display = "block";
+          }}
+          onMouseLeave={() => {
+            const tooltip = document.getElementById("tooltip");
+            if (tooltip) tooltip.style.display = "none";
+          }}
+          style={{ position: "relative", display: "inline-block", marginTop: "10px" }}
+        >
           <Link
             className="cursor-pointer"
             onClick={triggerFileInput}
           />
+          <span
+            id="tooltip"
+            style={{
+              display: "none",
+              position: "absolute",
+              bottom: "125%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              backgroundColor: "#000",
+              color: "#fff",
+              padding: "5px 8px",
+              borderRadius: "4px",
+              fontSize: "12px",
+              whiteSpace: "nowrap",
+              zIndex: 999,
+            }}
+          >
+            Upload .txt file only
+          </span>
           <input
             type="file"
-            accept=".txt,.pdf,.docx" // optional
+            accept=".txt"
             onChange={handleFileChange}
             ref={fileInputRef}
             style={{ display: "none" }}
@@ -104,9 +137,7 @@ function Hero() {
         {Lookup.SUGGSTIONS.map((sugg, index) => (
           <h2
             key={index}
-            onClick={() => {
-              onGenerate(sugg);
-            }}
+            onClick={() => onGenerate(sugg)}
             className="p-2 border border-gray-700 hover:border-gray-100 rounded-full text-sm text-gray-400 hover:text-white cursor-pointer"
           >
             {sugg}

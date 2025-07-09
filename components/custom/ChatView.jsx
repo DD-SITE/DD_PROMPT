@@ -5,7 +5,7 @@ import { api } from "@/convex/_generated/api";
 import Colors from "@/data/Colors";
 import { useConvex, useMutation } from "convex/react";
 import { useParams } from "next/navigation";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { ArrowRight, Link, Loader2Icon } from "lucide-react";
 import Lookup from "@/data/Lookup";
@@ -23,6 +23,9 @@ function ChatView() {
   const [loading, setLoading] = useState(false);
   const UpdateMessages = useMutation(api.workspace.UpdateMessages);
   const { toggleSidebar } = useSidebar();
+
+  const [showTooltip, setShowTooltip] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     id && GetWorkspaceData();
@@ -85,19 +88,20 @@ function ChatView() {
     const file = e.target.files[0];
     if (!file) return;
 
+    let fileText = "";
     const reader = new FileReader();
-    reader.onload = () => {
-      const content = reader.result;
 
-      const fileMessage = {
-        role: "user",
-        content: `📎 Uploaded file: **${file.name}**\n\n\`\`\`\n${content}\n\`\`\``,
-      };
+    fileText = await new Promise((resolve) => {
+      reader.onload = () => resolve(reader.result);
+      reader.readAsText(file);
+    });
 
-      setMessages((prev) => [...prev, fileMessage]);
+    const fileMessage = {
+      role: "user",
+      content: `📎 Uploaded file: **${file.name}**\n\n\`\`\`\n${fileText}\n\`\`\``,
     };
 
-    reader.readAsText(file); // Can change to readAsDataURL for image files
+    setMessages((prev) => [...prev, fileMessage]);
   };
 
   return (
@@ -170,16 +174,41 @@ function ChatView() {
               />
             )}
           </div>
-          <div className="mt-2">
-            <label className="cursor-pointer">
-              <input
-                type="file"
-                className="hidden"
-                onChange={handleFileUpload}
-                accept=".txt,.md,.json"
-              />
+          <div className="mt-2 relative inline-block">
+            <div
+              onMouseEnter={() => setShowTooltip(true)}
+              onMouseLeave={() => setShowTooltip(false)}
+              onClick={() => fileInputRef.current?.click()}
+              className="cursor-pointer inline-block"
+            >
               <Link className="text-blue-400 hover:text-blue-600" />
-            </label>
+            </div>
+            {showTooltip && (
+              <div
+                style={{
+                  position: "absolute",
+                  bottom: "120%",
+                  left: 0,
+                  backgroundColor: "#111",
+                  color: "#fff",
+                  padding: "5px 8px",
+                  borderRadius: "4px",
+                  fontSize: "12px",
+                  whiteSpace: "nowrap",
+                  zIndex: 10,
+                  marginBottom: "6px",
+                }}
+              >
+                Upload <code>.txt</code> file only
+              </div>
+            )}
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
+              onChange={handleFileUpload}
+              accept=".txt"
+            />
           </div>
         </div>
       </div>
