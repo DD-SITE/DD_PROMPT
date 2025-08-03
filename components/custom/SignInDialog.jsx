@@ -135,9 +135,7 @@ export default function SignInDialog({ openDialog, closeDialog }) {
               &nbsp; Sign in with GitHub
             </Button>
 
-            <Button variant="ghost" className="mx-10" size="lg" disabled>
-              Sign In with Email and Password
-            </Button>
+            
           </DialogDescription>
         </DialogHeader>
         <DialogFooter className="text-center text-[15px] font-medium my-8 mx-12">
