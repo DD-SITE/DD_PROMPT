@@ -1,7 +1,6 @@
 export const runtime = "nodejs";
 
 import { NextResponse } from "next/server";
-import pdfParse from "pdf-parse";
 
 export async function POST(req) {
   const formData = await req.formData();
@@ -13,12 +12,15 @@ export async function POST(req) {
 
   try {
     const buffer = Buffer.from(await file.arrayBuffer());
-    const data = await pdfParse(buffer);
 
-    console.log("✅ Using route.js for /api/upload");
-    return NextResponse.json({ extractedText: data.text.trim() });
+    // You can do something with the buffer here if needed
+    console.log("✅ File received at /api/upload");
+
+    return NextResponse.json({
+      message: "File uploaded successfully. PDF parsing is disabled.",
+    });
   } catch (error) {
-    console.error("PDF parse failed:", error);
-    return NextResponse.json({ error: "Failed to parse PDF" }, { status: 500 });
+    console.error("File handling failed:", error);
+    return NextResponse.json({ error: "Failed to handle file" }, { status: 500 });
   }
 }
