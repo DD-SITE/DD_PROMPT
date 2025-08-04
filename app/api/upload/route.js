@@ -15,6 +15,7 @@ export async function POST(req) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const data = await pdfParse(buffer);
 
+    console.log("✅ Using route.js for /api/upload");
     return NextResponse.json({ extractedText: data.text.trim() });
   } catch (error) {
     console.error("PDF parse failed:", error);
