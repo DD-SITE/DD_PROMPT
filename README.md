@@ -3,6 +3,7 @@
 ![Next.js](https://img.shields.io/badge/Next.js-15.3.1-black?style=for-the-badge&logo=nextdotjs)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-38B2AC?style=for-the-badge&logo=tailwind-css)
+![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![Convex](https://img.shields.io/badge/Convex-Backend-blueviolet?style=for-the-badge)
 ![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)
 ![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)
