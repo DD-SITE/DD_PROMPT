@@ -11,7 +11,7 @@
 
 ---
 
-## 🚀 Overview  
+##  Overview  
 **ddprompt** is a full-stack web application that generates complete website code based on user prompts using **Google Gemini API**.  
 It provides live previews of both **generated code** and the **rendered webpage**, with options to export files or deploy directly via an integrated sandbox.  
 
@@ -62,8 +62,8 @@ https://github.com/user-attachments/assets/ae3308eb-0af4-4fc4-b6ae-bd5cf233cf4f
 
 **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/ddprompt.git
-   cd ddprompt
+   git clone https://github.com/DD-SITE/DD_PROMPT
+   cd DD_PROMPT
 ```
 
 **Install dependencies:**
