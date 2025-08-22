@@ -45,7 +45,7 @@ It provides live previews of both **generated code** and the **rendered webpage*
 - Axios, uuid4, mime  
 
 **Developer Tools**  
-- TypeScript 5.8, PostCSS, Next Lint  
+- Javascript, PostCSS, Next Lint  
 
 **Deployment**  
 - Hosted on **Vercel**  
