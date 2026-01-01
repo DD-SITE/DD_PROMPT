@@ -20,18 +20,18 @@ It provides live previews of both **generated code** and the **rendered webpage*
 
 ---
 
-## ✨ Features  
-- 📝 **Prompt-to-Code Generation**: Generate website code files instantly using **Google Gemini API**.  
-- 🔍 **Dual Preview Mode**: View both code and the live-rendered website.  
-- 📦 **Sandbox Integration**: This project uses [Sandpack](https://sandpack.codesandbox.io/) to provide an in-browser code editor and preview environment.  
-- 📂 **File Upload Support**: Upload `.txt` files as input for code generation.  
-- ⏳ **Prompt History Sidebar**: Track and reuse your previous prompts.  
-- 🔄 **Regeneration Support**: Modify prompts and regenerate code seamlessly.  
-- 🔐 **Authentication**: Sign in with **Google** or **GitHub** via NextAuth.  
+##  Features  
+-  **Prompt-to-Code Generation**: Generate website code files instantly using **Google Gemini API**.  
+-  **Dual Preview Mode**: View both code and the live-rendered website.  
+-  **Sandbox Integration**: This project uses [Sandpack](https://sandpack.codesandbox.io/) to provide an in-browser code editor and preview environment.  
+-  **File Upload Support**: Upload `.txt` files as input for code generation.  
+-  **Prompt History Sidebar**: Track and reuse your previous prompts.  
+-  **Regeneration Support**: Modify prompts and regenerate code seamlessly.  
+-  **Authentication**: Sign in with **Google** or **GitHub** via NextAuth.  
 
 ---
 
-## 🛠️ Tech Stack  
+##  Tech Stack  
 
 **Frontend**  
 - React 19, Next.js 15.3.1, Tailwind CSS 4  
